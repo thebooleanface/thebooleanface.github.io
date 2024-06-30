@@ -70,9 +70,8 @@ Type 'help' for a list of available commands.
         const input = document.getElementById('command-input');
         const commands = {
             help: 'Displays this help message',
-            search: 'Search the web (usage: search <query>)',
             clear: 'Clears the terminal',
-            about: 'Displays information about CommandSearch',
+            about: 'Displays information about me.',
             time: 'Displays the current time',
             echo: 'Repeats the given text',
             calc: 'Simple calculator (usage: calc 2 + 2)',
@@ -106,22 +105,11 @@ Type 'help' for a list of available commands.
                         output.innerHTML += `  ${cmd.padEnd(10)} - ${desc}\n`;
                     }
                     break;
-                case 'search':
-                    if (args.length > 0) {
-                        const query = args.join(' ');
-                        output.innerHTML += `Searching for: ${query}\n`;
-                        output.innerHTML += `Results can be found at: https://websitewithcommandlinesearchbar/search?q=${encodeURIComponent(query)}\n`;
-                    } else {
-                        output.innerHTML += 'Usage: search <query>\n';
-                    }
-                    break;
                 case 'clear':
                     output.innerHTML = '';
                     break;
                 case 'about':
-                    output.innerHTML += 'CommandSearch v1.0\n';
-                    output.innerHTML += 'A terminal-style search interface.\n';
-                    output.innerHTML += 'Created by the CommandSearch Team.\n';
+                    output.innerHTML += 'Hi! I am Krisha, just your regular programmer, who sometimes makes vlogs. Going to start my second year of bachelors soon. Excitement varies.\n';
                     break;
                 case 'time':
                     output.innerHTML += new Date().toLocaleString() + '\n';
