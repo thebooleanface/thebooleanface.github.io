@@ -1,0 +1,134 @@
+<html><head><!base href="commandlinesearch"><title>Command Line Search Interface</title>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: 'Courier New', monospace;
+        background-color: #000;
+        color: #00ff00;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    #terminal {
+        width: 80%;
+        max-width: 800px;
+        height: 500px;
+        background-color: #0a0a0a;
+        border: 2px solid #00ff00;
+        border-radius: 10px;
+        padding: 20px;
+        overflow-y: auto;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    }
+    #output {
+        margin-bottom: 20px;
+        white-space: pre-wrap;
+    }
+    #input-line {
+        display: flex;
+        align-items: center;
+    }
+    #prompt {
+        margin-right: 10px;
+    }
+    #command-input {
+        flex-grow: 1;
+        background-color: transparent;
+        border: none;
+        color: #00ff00;
+        font-family: 'Courier New', monospace;
+        font-size: 16px;
+        outline: none;
+    }
+    .blink {
+        animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+        50% { opacity: 0; }
+    }
+</style>
+</head>
+<body>
+    <div id="terminal">
+        <div id="output">Welcome to Krisha's website.
+Type 'help' for a list of available commands.
+        </div>
+        <div id="input-line">
+            <span id="prompt">root@commandsearch:~$</span>
+            <input type="text" id="command-input" autofocus>
+            <span class="blink">█</span>
+        </div>
+    </div>
+
+    <script>
+        const output = document.getElementById('output');
+        const input = document.getElementById('command-input');
+        const commands = {
+            help: 'Displays this help message',
+            search: 'Search the web (usage: search <query>)',
+            clear: 'Clears the terminal',
+            about: 'Displays information about CommandSearch',
+            time: 'Displays the current time',
+            echo: 'Repeats the given text',
+            calc: 'Simple calculator (usage: calc 2 + 2)',
+            about: 'opens about me page'
+        };
+
+        input.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                const command = this.value.trim();
+                output.innerHTML += `\nroot@commandsearch:~$ ${command}\n`;
+                processCommand(command);
+                this.value = '';
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        });
+
+        function processCommand(command) {
+            const [cmd, ...args] = command.split(' ');
+            switch(cmd.toLowerCase()) {
+                case 'help':
+                    output.innerHTML += 'Available commands:\n';
+                    for (let [cmd, desc] of Object.entries(commands)) {
+                        output.innerHTML += `  ${cmd.padEnd(10)} - ${desc}\n`;
+                    }
+                    break;
+                case 'search':
+                    if (args.length > 0) {
+                        const query = args.join(' ');
+                        output.innerHTML += `Searching for: ${query}\n`;
+                        output.innerHTML += `Results can be found at: https://websitewithcommandlinesearchbar/search?q=${encodeURIComponent(query)}\n`;
+                    } else {
+                        output.innerHTML += 'Usage: search <query>\n';
+                    }
+                    break;
+                case 'clear':
+                    output.innerHTML = '';
+                    break;
+                case 'about':
+                    output.innerHTML += 'CommandSearch v1.0\n';
+                    output.innerHTML += 'A terminal-style search interface.\n';
+                    output.innerHTML += 'Created by the CommandSearch Team.\n';
+                    break;
+                case 'time':
+                    output.innerHTML += new Date().toLocaleString() + '\n';
+                    break;
+                case 'echo':
+                    output.innerHTML += args.join(' ') + '\n';
+                    break;
+                case 'calc':
+                    try {
+                        output.innerHTML += eval(args.join(' ')) + '\n';
+                    } catch (e) {
+                        output.innerHTML += 'Invalid calculation\n';
+                    }
+                    break;
+                default:
+                    output.innerHTML += `Command not found: ${cmd}. Type 'help' for a list of commands.\n`;
+            }
+        }
+    </script>
+</body></html>
