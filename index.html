@@ -1,55 +1,57 @@
-<html><head><!base href="commandlinesearch"><title>Command Line Search Interface</title>
-<style>
-    body, html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        font-family: 'Courier New', monospace;
-        background-color: #000;
-        color: #00ff00;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    #terminal {
-        width: 80%;
-        max-width: 800px;
-        height: 500px;
-        background-color: #0a0a0a;
-        border: 2px solid #00ff00;
-        border-radius: 10px;
-        padding: 20px;
-        overflow-y: auto;
-        box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
-    }
-    #output {
-        margin-bottom: 20px;
-        white-space: pre-wrap;
-    }
-    #input-line {
-        display: flex;
-        align-items: center;
-    }
-    #prompt {
-        margin-right: 10px;
-    }
-    #command-input {
-        flex-grow: 1;
-        background-color: transparent;
-        border: none;
-        color: #00ff00;
-        font-family: 'Courier New', monospace;
-        font-size: 16px;
-        outline: none;
-    }
-    .blink {
-        animation: blink 1s step-end infinite;
-    }
-    @keyframes blink {
-        50% { opacity: 0; }
-    }
-</style>
+<!DOCTYPE html>
+<html><head>
+    <title>Command Line Search Interface</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Courier New', monospace;
+            background-color: #000;
+            color: #00ff00;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #terminal {
+            width: 80%;
+            max-width: 800px;
+            height: 500px;
+            background-color: #0a0a0a;
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+        }
+        #output {
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+        #input-line {
+            display: flex;
+            align-items: center;
+        }
+        #prompt {
+            margin-right: 10px;
+        }
+        #command-input {
+            flex-grow: 1;
+            background-color: transparent;
+            border: none;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            outline: none;
+        }
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    </style>
 </head>
 <body>
     <div id="terminal">
@@ -74,7 +76,15 @@ Type 'help' for a list of available commands.
             time: 'Displays the current time',
             echo: 'Repeats the given text',
             calc: 'Simple calculator (usage: calc 2 + 2)',
-            about: 'opens about me page'
+            open: 'Opens a specified website',
+            list: 'Lists all websites that can be opened'
+        };
+
+        const websites = {
+            x: 'https://twitter.com/KrishaShastri',
+            github: 'https://github.com/thebooleanface',
+            linkedin: 'https://www.linkedin.com/in/krisha-shastri-5a259a284/',
+            youtube: 'https://youtube.com/@a_girl_must_not_be_named?si=kHPTGI4iiBJTl-45'
         };
 
         input.addEventListener('keydown', function(event) {
@@ -126,9 +136,30 @@ Type 'help' for a list of available commands.
                         output.innerHTML += 'Invalid calculation\n';
                     }
                     break;
+                case 'open':
+                    if (args.length > 0) {
+                        const website = args.join('').toLowerCase();
+                        if (websites[website]) {
+                            const url = websites[website];
+                            output.innerHTML += `Opening ${url}...\n`;
+                            window.open(url, '_blank');
+                        } else {
+                            output.innerHTML += `Account not found on ${website}\n`;
+                        }
+                    } else {
+                        output.innerHTML += 'Usage: open <website>\n';
+                    }
+                    break;
+                case 'list':
+                    output.innerHTML += 'Websites that can be opened:\n';
+                    for (let [site, url] of Object.entries(websites)) {
+                        output.innerHTML += `  ${site}\n`;
+                    }
+                    break;
                 default:
                     output.innerHTML += `Command not found: ${cmd}. Type 'help' for a list of commands.\n`;
             }
         }
     </script>
-</body></html>
+</body>
+</html>
